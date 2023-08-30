@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDO Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .fido-login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .fido-login-container input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e1e1e1;
+            border-radius: 4px;
+        }
+        .fido-login-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #0073aa;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .fido-login-container button:hover {
+            background-color: #005177;
+        }
+        .fido-login-container button:not(:last-child) {
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="fido-login-container">
+        <h2>FIDO Login</h2>
+        <input type="email" placeholder="Enter your email">
+        <div>
+            <button id="fido-register-btn">Register</button>
+            <button id="fido-login-btn">Login</button>
+        </div>
+    </div>
+</body>
+</html>
