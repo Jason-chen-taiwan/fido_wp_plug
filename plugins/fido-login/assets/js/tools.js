@@ -7,7 +7,7 @@ function getData(url) {
 }
 
 function postData(url, content) {
-  console.log("post to: ", url);
+  // console.log("post to: ", url);
   return fetch(url, {
     method: "POST",
     headers: {
@@ -21,7 +21,7 @@ function postData(url, content) {
 }
 
 function putData(url, content) {
-  console.log("put to: ", url);
+  // console.log("put to: ", url);
   return fetch(url, {
     method: "PUT",
     headers: {

@@ -106,22 +106,29 @@ function gogo_add_button_to_head() {
     if ( is_front_page() ) {  // 檢查是否是首頁
         $page_id = get_option('gogo_custom_page_id');
         $page_link = get_permalink($page_id);  
+        if ( is_user_logged_in() ) {
+            // 用戶已經登錄，顯示用戶資訊
+            $current_user = wp_get_current_user();
+            echo '<div class="user-info">';
+            echo '<p>歡迎，' . esc_html( $current_user->display_name ) . '</p>';
+            echo '</div>';
+        }else{
+            echo '<div class="text-center my-4">';  // 使用 Bootstrap 的 text-center 和 my-4 類
+            
+            echo '<form id="gogo-email-form" action="' . esc_url($page_link) . '" method="post">'; // 添加 form 標籤
 
-        echo '<div class="text-center my-4">';  // 使用 Bootstrap 的 text-center 和 my-4 類
-        
-        echo '<form id="gogo-email-form" action="' . esc_url($page_link) . '" method="post">'; // 添加 form 標籤
+            // 增加一個 email 輸入框，使用 Bootstrap 的 form-control 和 mr-2 類
+            echo '<input id="email" type="email" name="user_email" class="form-control d-inline-block mr-2" style="width: auto;" placeholder="Enter your email">';
 
-        // 增加一個 email 輸入框，使用 Bootstrap 的 form-control 和 mr-2 類
-        echo '<input id="email" type="email" name="user_email" class="form-control d-inline-block mr-2" style="width: auto;" placeholder="Enter your email">';
+            echo '<button type="button" onclick="doRegister()" class="btn btn-primary mr-2">Register</button>';
+            echo '<button type="button" onclick="doLogin()"  class="btn btn-secondary">Login</button>';  // 修改為 button 元素並添加 name 和 value 屬性
 
-        echo '<button type="button" onclick="doRegister()" class="btn btn-primary mr-2">Register</button>';
-        echo '<button type="button" onclick="doLogin()"  class="btn btn-secondary">Login</button>';  // 修改為 button 元素並添加 name 和 value 屬性
-
-        echo '</form>';
-        
-        echo '</div>';
+            echo '</form>';
+            
+            echo '</div>';
+        }
     }
 }
-add_action('wp_body_open', 'gogo_add_button_to_head');
+add_action('theme_header', 'gogo_add_button_to_head');
 
 

@@ -120,13 +120,36 @@ function wp_webauthn_put_register_option(WP_REST_Request $request){
         'Content-Length: ' . strlen($data),
         'Content-Type: application/json'
     ));
-     // 執行cURL session
-     $response = curl_exec($ch);
+
+    // 執行cURL session
+    $response = curl_exec($ch);
+
      // 檢查是否有cURL錯誤
      if (curl_errno($ch)) {
          echo 'cURL error: ' . curl_error($ch);
      } else {
-         return $response;
+        //register with response information  
+        $data = json_decode($response, true);
+        if (isset($data['uid'])) {
+            $uid = $data['uid'];
+        }
+        // 检查该UID是否已经存在于数据库中
+        $existing_user = get_user_by('login', $uid);
+
+        if ($existing_user) {
+            return $response;
+        }else{
+            //user data
+            $user_data = array(
+                'user_login'    => $uid,
+                'user_pass'     => wp_generate_password(), // 生成一个随机密码
+                'display_name'  => 'FIDO Passwordless User' // 显示的名字
+            );
+            $user_id = wp_insert_user($user_data);
+            if (!is_wp_error($user_id)) {
+                return $response;
+            }
+        }
      }
      // 關閉cURL session
      curl_close($ch);
@@ -201,7 +224,22 @@ function wp_webauthn_put_login_option(WP_REST_Request $request){
       if (curl_errno($ch)) {
           echo 'cURL error: ' . curl_error($ch);
       } else {
-          return $response;
+         //register with response information  
+        $data = json_decode($response, true);
+        if (isset($data['user']['id'])) {
+             $uid = $data['user']['id'];
+        }
+        $existing_user = get_user_by('login', $uid);
+        
+        if ($existing_user) {
+            // 执行登录
+            wp_set_current_user($existing_user->ID, $existing_user->user_login);
+            wp_set_auth_cookie($existing_user->ID);
+            do_action('wp_login', $existing_user->user_login);
+            return $response;
+        }else{
+            return '{code: 300}';
+        }
       }
       // 關閉cURL session
       curl_close($ch);

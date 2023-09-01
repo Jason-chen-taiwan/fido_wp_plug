@@ -79,7 +79,10 @@ function doLogin() {
     .then((response) => {
       const jsonObject = JSON.parse(response);
       if (jsonObject.code == 0) {
+        document.getElementById("gogo-email-form").style.display = "none";
         console.log("User login succese");
+      } else {
+        console.log("With error code");
       }
     });
 }
